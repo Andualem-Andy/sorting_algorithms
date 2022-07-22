@@ -1,41 +1,32 @@
-#include "stdio.h"
 #include "sort.h"
-
 /**
- * permut - permute les valeur de a et b
- * @a: premier entier
- * @b: deuxième entier
- * Return: Void
- */
-void permut(int *a, int *b)
-{
-	int temp = *a;
-	*a = *b;
-	*b = temp;
-}
-/**
- * selection_sort - sorts array of int in asc order using the Selection sort
- * @array: array to sort
- * @size: size of array
- * Return: void
- */
+  * selection_sort - Sort an array of integers in ascending order
+  *                  using the selection sort algorithm.
+  * @array: array to sort
+  * @size: size of array
+  * Description: Prints the array after each swap.
+  */
 void selection_sort(int *array, size_t size)
 {
-	size_t i = 0, j, min;
+	size_t i, i2;
+	int min, tmp, idx;
 
 	for (i = 0; i < size; i++)
 	{
-		min = i;
-		for (j = i + 1; j < size; j++)
+		min = array[i];
+		for (i2 = i + 1; i2 < size; i2++)
 		{
-			if (array[j] < array[min])
+			if (min > array[i2])
 			{
-				min = j;
+				min = array[i2];
+				idx = i2;
 			}
 		}
-		if (min != i)
+		if (min != array[i])
 		{
-			permut(&array[i], &array[min]);
+			tmp = array[i];
+			array[i] = min;
+			array[idx] = tmp;
 			print_array(array, size);
 		}
 	}

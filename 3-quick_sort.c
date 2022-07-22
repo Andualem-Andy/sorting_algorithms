@@ -1,85 +1,76 @@
-#include "stdio.h"
 #include "sort.h"
 
+/*prototypes. funcs() defined later in this file*/
+void sort_alg(int *arr, int left, int right, size_t size);
+int split(int *arr, int left, int right, size_t size);
+
 /**
- * permuter - permute les valeur de a et b
- * @a: premier entier
- * @b: deuxième entier
- * Return: Void
- */
-void permuter(int *a, int *b)
+  * quick_sort - quicksort algorithm
+  * @array: array to be sorted
+  * @size: size of array
+  */
+void quick_sort(int *array, size_t size)
 {
-	int temp = *a;
-	*a = *b;
-	*b = temp;
+	if (array == NULL || size <= 1)
+		return;
+	sort_alg(array, 0, size - 1, size);
 }
 
 /**
- * _split - splits the array and takes the last element as pivot
- * @arr: input array
- * @min: first element
- * @last: The last element
- * @size: size
- * Return: integer
- */
-int _split(int *arr, int min, int last, size_t size)
+  * sort_alg - recursive sorting algorithm
+  * @arr: array
+  * @left: leftmost index
+  * @right: rightmost index
+  * @size: full size of array
+  */
+void sort_alg(int *arr, int left, int right, size_t size)
 {
-	int piv;
-	int i = (min);
-	int j;
+	int pivot;
 
-	piv = arr[last];
-	for (j = min; j < last; j++)
+	if (left < right)
 	{
-		if (arr[j] <= piv)
+		pivot = split(arr, left, right, size);
+		sort_alg(arr, left, pivot - 1, size);
+		sort_alg(arr, pivot + 1, right, size);
+	}
+}
+
+/**
+  * split - split array
+  * @arr: array
+  * @left: leftmost index
+  * @right: rightmost index
+  * @size: full array size
+  * Return: pivot index
+  */
+int split(int *arr, int left, int right, size_t size)
+{
+	int i, i2, pivot, tmp;
+
+	pivot = arr[right];
+	i = left;
+
+	for (i2 = left; i2 < right; i2++)
+	{
+		if (arr[i2] < pivot)
 		{
-			permuter(&arr[i], &arr[j]);
-
-			if (i != j)
+			if (i != i2)
+			{
+				tmp = arr[i2];
+				arr[i2] = arr[i];
+				arr[i] = tmp;
 				print_array(arr, size);
-
+			}
 			i++;
 		}
 	}
-
-	permuter(&arr[i], &arr[last]);
-	if (i != j)
+	if (arr[i] != arr[right])
 	{
+		tmp = arr[i];
+		arr[i] = arr[right];
+		arr[right] = tmp;
 		print_array(arr, size);
 	}
+
 	return (i);
-}
-
-/**
- * quick_sort_array - quick_sort_array
- * @arr: arr
- * @min: min
- * @last: last
- * @size: size
- */
-void quick_sort_array(int *arr, int min, int last, size_t size)
-{
-	int piv;
-
-	if (min < last)
-	{
-		piv = _split(arr, min, last, size);
-		quick_sort_array(arr, min, (piv - 1), size);
-		quick_sort_array(arr, (piv + 1), last, size);
-	}
-}
-
-/**
- * quick_sort - sorts array of int in asc order using the Quick sort
- * @array: array to sort
- * @size: size of array
- * Return: void
- */
-void quick_sort(int *array, size_t size)
-{
-	if (size < 2)
-	{
-		return;
-	}
-	quick_sort_array(array, 0, size - 1, size);
 }
